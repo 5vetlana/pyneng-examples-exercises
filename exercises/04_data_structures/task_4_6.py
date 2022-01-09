@@ -18,3 +18,13 @@ this stage it is difficult otherwise test the result.
 """
 
 ospf_route = "      10.0.24.0/24 [110/41] via 10.0.13.3, 3d18h, FastEthernet0/0"
+prefix, AD, _, hop, last_update, outbound_interface = ospf_route.strip().split()
+test = "test"
+ospf_template = f'''
+Prefix              {prefix:20}
+AD/Metric           {AD:20}
+Next-Hop            {hop:20}
+Last Update         {last_update:20}
+Outbound Interface  {outbound_interface:20}
+'''
+print(ospf_template)
