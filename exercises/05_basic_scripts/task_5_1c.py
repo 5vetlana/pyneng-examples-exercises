@@ -47,3 +47,13 @@ london_co = {
         "routing": True,
     },
 }
+
+#List all devices currently in list
+all_devices = ",".join(london_co.keys())
+device = input(f"Enter device name ({all_devices}): ")
+#list all parameters for a specified device
+parameters = ",".join(london_co[device].keys())
+print(parameters)
+param = input(f"Enter parameter name ({parameters}): ")
+#Print parameter for chosen device
+print(london_co[device].get(param, "There is no such parameter"))
