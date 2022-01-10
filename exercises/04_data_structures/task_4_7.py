@@ -16,3 +16,9 @@ this stage it is difficult otherwise test the result.
 """
 
 mac = "AAAA:BBBB:CCCC"
+mac = mac.split(":")
+mac = ''.join(mac)
+mac1, mac2, mac3, mac4, mac5, mac6 =  int(mac[:2], 16), int(mac[2:4], 16), int(mac[4:6], 16), int(mac[6:8], 16), int(mac[8:10], 16), int(mac[10:], 16)
+
+result = f"{mac1:08b}{mac2:08b}{mac3:08b}{mac4:08b}{mac5:08b}{mac6:08b}"
+print(result)
