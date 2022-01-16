@@ -41,3 +41,38 @@ Then the network address will be the first 28 characters from bin_ip + 0000
 Restriction: All tasks must be done using the topics covered in this and previous chapters.
 
 """
+
+network_and_sub = input('Enter the IP network in the format 10.1.1.0/24: ')
+#Split user input to ip and mask
+ip_address, mask = network_and_sub.split('/')
+#Split the ip address input into octexts
+oct1, oct2, oct3, oct4 = ip_address.split('.')
+#Convert octets to binary 8 value sets and convert taht to a sting
+bin_ip = '{:08b}{:08b}{:08b}{:08b}'.format(int(oct1), int(oct2), int(oct3), int(oct4))
+#Convert mask to interger
+mask = int(mask)
+network_ip = bin_ip[0:mask] + "0" * (32 - mask)
+
+oct1 = int(network_ip[:8], 2)
+oct2 = int(network_ip[8:16], 2)
+oct3 = int(network_ip[16:24], 2)
+oct4 = int(network_ip[24:], 2)
+
+full_mask =  "1" * mask + "0" * (32 - mask)
+mask_oct1 = int(full_mask[:8], 2)
+mask_oct2 = int(full_mask[8:16],2)
+mask_oct3 = int(full_mask[16:24], 2)
+mask_oct4 = int(full_mask[24:],2)
+
+ip_template = '''
+Network:
+{0:<8}  {1:<8}  {2:<8}  {3:<8}
+{0:08b}  {1:08b}  {2:08b}  {3:08b}
+
+Mask:
+/{4:<8}
+{5:<8}  {6:<8}  {7:<8}  {8:<8}
+{5:08b}  {6:08b}  {7:08b}  {8:08b}
+'''
+
+print(ip_template.format(oct1, oct2, oct3, oct4, mask, mask_oct1, mask_oct2, mask_oct3, mask_oct4))
