@@ -14,3 +14,22 @@ Outbound Interface    FastEthernet0/0
 Restriction: All tasks must be done using the topics covered in this and previous chapters.
 
 """
+with open("ospf.txt") as f:
+    output = f.readlines()
+
+ospf_template ='''
+Prefix              {}
+AD/Metric           {}
+Next-Hop            {}
+Last update         {}
+Outbound Interface  {}
+'''
+
+for line in output:
+    line = line.replace(',',' ').split()
+    prefix = line[1]
+    AD = line[2]
+    Next_Hop = line[4]
+    Last_update = line[5]
+    Outbound_int = line[6]
+    print(ospf_template.format(prefix, AD, Next_Hop, Last_update, Outbound_int))
