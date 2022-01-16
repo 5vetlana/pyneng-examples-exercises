@@ -13,3 +13,10 @@ Restriction: All tasks must be done using the topics covered in this and previou
 """
 
 mac = ["aabb:cc80:7000", "aabb:dd80:7340", "aabb:ee80:7000", "aabb:ff80:7000"]
+
+new_mac = []
+for address in mac:
+    cisco_format = address.replace(":", ".")
+    new_mac.append(cisco_format)
+
+print(new_mac)
