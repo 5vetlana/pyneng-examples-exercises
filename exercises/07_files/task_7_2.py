@@ -38,5 +38,14 @@ interface Ethernet0/3
  switchport mode trunk
  spanning-tree portfast edge trunk
 ...
-
 """
+
+with open("config_sw1.txt") as f:
+    output = f.readlines()
+
+for line in output:
+    line = line.strip()
+    if line.startswith("!"):
+        continue
+    else:
+        print(line)
