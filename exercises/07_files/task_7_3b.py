@@ -17,3 +17,28 @@ Enter VLAN number: 10
 Restriction: All tasks must be done using the topics covered in this and previous chapters.
 
 """
+vlan_num = int(input("Enter VLAN number:"))
+
+
+with open('CAM_table.txt') as src:
+    output = src.readlines()
+
+line_list = []
+for line in output:
+    line = line.split()
+    #Remove empty lines and those that don't start with a digit
+    if len(line) != 0 and line[0].isdigit():
+        #Turn the vlan into a number for sorting
+        line[0] =  int(line[0])
+        #Append the line to a new list
+        line_list.append(line)
+        #Sort list in place
+        line_list.sort()
+
+#Create and print output from sorted list
+for line in line_list:
+    vlan = line[0]
+    mac = line[1]
+    int = line[3]
+    if vlan_num == vlan:
+        print('{:<8}{:<}{:>8}'.format(vlan, mac, int))
