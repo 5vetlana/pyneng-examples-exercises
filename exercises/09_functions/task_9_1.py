@@ -73,3 +73,14 @@ def generate_access_config(intf_vlan_mapping, access_template):
 
     Returns a list of commands.
     """
+    access_interface_list = []
+    for key, value in intf_vlan_mapping.items():
+        access_interface_list.append("interface " + key)
+        for command in access_template:
+            if command == "switchport access vlan":
+                access_interface_list.append("switchport access vlan " + str(value))
+            else:
+                access_interface_list.append(command)
+    return(access_interface_list)
+
+print(generate_access_config(access_config_2, access_mode_template))
