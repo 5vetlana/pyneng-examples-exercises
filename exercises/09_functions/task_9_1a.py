@@ -41,3 +41,28 @@ port_security_template = [
 ]
 
 access_config = {"FastEthernet0/12": 10, "FastEthernet0/14": 11, "FastEthernet0/16": 17}
+
+def generate_access_config(intf_vlan_mapping, access_template, psecurity=None):
+    """
+    intf_vlan_mapping is a dictionary with interface-VLAN mapping:
+         {'FastEthernet0/12': 10,
+          'FastEthernet0/14': 11,
+          'FastEthernet0/16': 17}
+    access_template - list of commands for the port in access mode
+
+    Returns a list of commands.
+    """
+    access_interface_list = []
+    for key, value in intf_vlan_mapping.items():
+        access_interface_list.append("interface " + key)
+        for command in access_template:
+            if command == "switchport access vlan":
+                access_interface_list.append("switchport access vlan " + str(value))
+            else:
+                access_interface_list.append(command)
+        if psecurity != None:
+            for command in psecurity:
+                access_interface_list.append(command)
+    return(access_interface_list)
+
+print(generate_access_config(access_config, access_mode_template, port_security_template))
