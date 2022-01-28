@@ -56,7 +56,7 @@ def generate_trunk_config(intf_vlan_mapping, trunk_template):
     trunk_template: expects trunk port configuration template as command list
         (trunk_mode_template list)
 
-    Return a list of commands with configuration based on the specified ports and trunk_mode_template.
+    Returns a dictionary of commands with configuration based on the specified ports and trunk_mode_template.
     """
     command_dict = {}
     interface_trunk_list = []
