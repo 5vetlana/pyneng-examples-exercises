@@ -49,10 +49,10 @@ def get_int_vlan_map(config_filename):
     for line in output:
         if line.startswith("interface FastEthernet"):
             interface = line.split()[-1]
-        if line.strip().startswith("switchport access vlan"):
+        elif line.strip().startswith("switchport access vlan"):
             vlan = line.split()[-1]
             access_dict[interface] = vlan
-        if line.strip().startswith("switchport trunk allowed vlan"):
+        elif line.strip().startswith("switchport trunk allowed vlan"):
             vlan = line.split()[-1].split(',')
             trunk_dict[interface] = vlan
     return (access_dict, trunk_dict)
