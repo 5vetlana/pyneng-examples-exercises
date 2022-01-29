@@ -64,3 +64,32 @@ def ignore_command(command, ignore):
         if word in command:
             ignore_status = True
     return ignore_status
+
+def convert_config_to_dict(config_filename):
+    """
+    The function handles the switch configuration
+    file and returns a dictionary:
+    * All top-level commands (global configuration mode) will be keys.
+    * If the top-level team has subcommands, they must be in the value
+      from the corresponding key, in the form of a list (spaces at the beginning of the line must be removed).
+    * If the top-level command has no subcommands, then the value will be an empty list
+    """
+    with open(config_filename) as src:
+        output = src.readlines()
+
+    config_dict = {}
+    command_list = []
+    for line in output:
+        if not ignore_command(line, ignore) and not line.startswith("!") and line != "\n":
+            if not line.startswith(" "):
+                top_level_command = line.strip()
+                #Creates list
+                config_dict[top_level_command] = []
+            else:
+                sub_command = line.strip()
+                #Adds command to the list
+                config_dict[top_level_command].append(sub_command)
+    return config_dict
+
+
+print(convert_config_to_dict('config_sw1.txt'))
