@@ -45,6 +45,18 @@ def parse_cdp_neighbors(command_output):
     Plus, we learn to work with such a output.
     """
 
+    result = {}
+    for line in command_output.split("\n"):
+        if line != "\n":
+            split_line = line.split()
+            if "show cdp neighbors" in line:
+                local_device = line.split(">")[0]
+            elif len(split_line) >= 5 and split_line[3].isdigit():
+                local_interface = split_line[1] + split_line[2]
+                remote_device = split_line[0]
+                remote_interface = split_line[-2] + split_line[-1]
+                result[(local_device, local_interface)] = (remote_device, remote_interface)
+    return result
 
 if __name__ == "__main__":
     with open("sh_cdp_n_sw1.txt") as f:
