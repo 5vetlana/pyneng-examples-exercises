@@ -27,9 +27,23 @@ command output files, you need to correct the function code in task 11.1.
 Restriction: All tasks must be done using the topics covered in this and previous chapters.
 
 """
+from task_11_1 import parse_cdp_neighbors
+from pprint import pprint
+
 infiles = [
     "sh_cdp_n_sw1.txt",
     "sh_cdp_n_r1.txt",
     "sh_cdp_n_r2.txt",
     "sh_cdp_n_r3.txt",
 ]
+
+def create_network_map(filenames):
+    topology_dict = {}
+    for file in filenames:
+        with open(file) as f:
+            parsed_cdp = parse_cdp_neighbors(f.read())
+            topology_dict.update(parsed_cdp)
+    return topology_dict
+
+if __name__ == "__main__":
+    pprint(create_network_map(infiles))
