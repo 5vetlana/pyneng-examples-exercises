@@ -22,3 +22,21 @@ of the IP address, address ranges, and so on, since the command
 output from network device is processed, not user input.
 
 """
+import re
+
+regex = r'ip address (\S+) (\S+)'
+
+def get_ip_from_cfg(filename):
+    with open(filename) as input:
+        output = input.read()
+    #rReterns an iterator and matching objects, searches though output as entire string output
+    result = re.finditer(regex, output)
+    #Loops through iterators from above and adds match tuple to groups list
+    groups = []
+    for match in result:
+        groups.append(match.groups())
+    return groups
+
+
+
+print(get_ip_from_cfg('config_r1.txt'))
