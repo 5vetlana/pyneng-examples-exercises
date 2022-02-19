@@ -32,3 +32,20 @@ In the file with the rules for the ASA:
 
 In all rules for ASA, the interfaces will be the same (inside, outside).
 """
+import re
+
+def convert_ios_nat_to_asa(cisco_ios_file, asa_config_file):
+    with open(cisco_ios_file) as input:
+        with open(asa_config_file, 'w') as dest:
+            search_line = r'ip nat inside source static tcp (?P<ip>[\d.]+)\s(?P<protocol>[\d]+) interface \S+ (?P<end>\d+)'
+            regex = re.finditer(search_line,
+                     input.read())
+            for match in regex:
+                asa_config_template = """
+                object network {}
+                host {}
+                nat (inside, outside) static interface service tcp {} GigabitEthernet0/1 {}"""
+                object_name = "LOCAL_" + match.group('ip')
+                dest.write(asa_config_template.format(object_name, match.group('ip'), match.group('protocol'), match.group('end')))
+
+convert_ios_nat_to_asa('cisco_nat_config.txt','asa_test1.txt')
