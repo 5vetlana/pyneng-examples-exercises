@@ -24,3 +24,17 @@ of the IP address, address ranges, and so on, since the command
 output from network device is processed, not user input.
 
 """
+import re
+
+regex = re.compile(r'interface (?P<int>\S+)\n'
+                   r'( .*\n)*'
+                   r' ip address (?P<ip>\S+) (?P<mask>\S+)')
+
+result = {}
+def get_ip_from_cfg(filename):
+    with open(filename) as input:
+        for match in regex.finditer(input.read()):
+            result[match.group('int')] = (match.group('ip'), match.group('mask'))
+    return result
+
+print(get_ip_from_cfg('config_r1.txt'))
