@@ -21,3 +21,16 @@ interface Loopback0
 
 Check the operation of the function using the example of the config_r1.txt file.
 """
+import re
+
+def get_ints_without_description(device_config_file):
+    with open(device_config_file) as src:
+        regex = re.compile(r'interface (?P<intf>\S+\d+)\n'
+                           r'(?P<desc> description .*)*')
+        intf_list = []
+        for match in regex.finditer(src.read()):
+            if not match.group('desc'):
+                intf_list.append(match.group('intf'))
+        return intf_list
+
+print(get_ints_without_description('config_r1.txt'))
