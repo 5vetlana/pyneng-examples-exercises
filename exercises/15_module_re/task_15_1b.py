@@ -25,3 +25,25 @@ Please note that in this case, you can not check the correctness
 of the IP address, address ranges, and so on, since the command
 output from network device is processed, not user input.
 """
+import re
+from pprint import pprint
+
+def get_ip_from_cfg(filename):
+    result = {}
+    ip_list = []
+
+    regex = re.compile(r'interface (?P<int>\S+)\n'
+                       r'( .*\n)*'
+                       r' ip address (?P<ip>\S+) (?P<mask>\S+)\n'
+                       r'( ip address (?P<ip2>\S+) (?P<mask2>\S+) secondary)*')
+
+    with open(filename) as input:
+        for match in regex.finditer(input.read()):
+            result[match.group('int')] = ip_list
+            ip_list.append((match.group('ip'), match.group('mask')))
+            if match.group('ip2'):
+                ip_list.append((match.group('ip2'), match.group('mask2')))
+            ip_list = []
+        return result
+
+pprint(get_ip_from_cfg('config_r2.txt'))
