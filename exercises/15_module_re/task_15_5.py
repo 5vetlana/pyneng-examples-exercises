@@ -26,3 +26,18 @@ of the interface:
 
 Check the operation of the function on the sh_cdp_n_sw1.txt file.
 """
+import re
+from pprint import pprint
+
+def generate_description_from_cdp(cdp_output_file):
+    with open(cdp_output_file) as src:
+        regex = re.compile(r'(?P<device>\S+)           (?P<local_intf>\S+ \d+/\d+)         \d+           \w \w \w           \d+       (?P<port>\S+ \d+/\d+)\n')
+        cdp_dict = {}
+        for match in regex.finditer(src.read()):
+            device_name = match.group('device')
+            port = match.group('port')
+            cdp_dict[match.group('local_intf')] = f'description Connected to {device_name} port {port}'
+    return cdp_dict
+
+
+pprint(generate_description_from_cdp('sh_cdp_n_sw1.txt'))
