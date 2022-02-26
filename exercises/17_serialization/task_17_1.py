@@ -30,3 +30,32 @@ the file name, the rest - from the contents in the files.
 Check the function on the contents of the files sw1_dhcp_snooping.txt,
 sw2_dhcp_snooping.txt, sw3_dhcp_snooping.txt.
 """
+import csv
+import re
+from pprint import pprint
+
+def write_dhcp_snooping_to_csv(filenames, output):
+    line = []
+    data = []
+    for file in filenames:
+        with open(file, 'r') as src:
+            regex = re.compile(r'(?P<mac>[\S*:]+)\s*(?P<ip>[\d+.]+)\s*\d+\s*\S+\s*(?P<vlan>\d*)\s*(?P<intf>\w+\d/\d+)\n')
+            for match in regex.finditer(src.read()):
+                #Switch vlaue
+                line.append(file.split('_')[0])
+                line.append(match.group('mac'))
+                line.append(match.group('ip'))
+                line.append(match.group('vlan'))
+                line.append(match.group('intf'))
+                data.append(line)
+                #Clear line after append to data list
+                line = []
+
+        headers = ['switch', 'mac', 'ip', 'vlan', 'interface']
+        with open(output, 'w', newline = '') as dest:
+            writer = csv.writer(dest)
+            writer.writerow(headers)
+            for row in data:
+                writer.writerow(row)
+
+pprint(write_dhcp_snooping_to_csv(['sw1_dhcp_snooping.txt', 'sw2_dhcp_snooping.txt', 'sw3_dhcp_snooping.txt'], 'result.txt'))
