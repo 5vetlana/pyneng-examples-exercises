@@ -32,7 +32,6 @@ sw2_dhcp_snooping.txt, sw3_dhcp_snooping.txt.
 """
 import csv
 import re
-from pprint import pprint
 
 def write_dhcp_snooping_to_csv(filenames, output):
     line = {}
@@ -56,5 +55,3 @@ def write_dhcp_snooping_to_csv(filenames, output):
         writer.writeheader()
         for row in data:
             writer.writerow(row)
-
-pprint(write_dhcp_snooping_to_csv(['sw1_dhcp_snooping.txt', 'sw2_dhcp_snooping.txt', 'sw3_dhcp_snooping.txt'], 'result.txt'))
