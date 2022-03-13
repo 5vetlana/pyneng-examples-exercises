@@ -37,14 +37,35 @@ The routers_inventory.csv file should have the following columns (in this order)
 * hostname, ios, image, uptime
 
 The code below has created a list of files using the glob module.
-You can uncomment the print(sh_version_files) line to see the content of the list.
+You can uncomment the print(sh_version_files) line to see the content of the lis22t.
 
 In addition, a list of headers has been created, which should be written to CSV.
 """
-
+import csv
+import re
 import glob
 
-sh_version_files = glob.glob("sh_vers*")
-# print(sh_version_files)
+def parse_sh_version(show_version_output):
+    regex = re.search(r'Version (?P<ios>\S+), .*'
+                      r'router uptime is (?P<uptime>\d+ days, \d+ hours, \d+ minutes).*'
+                      r'.*System image file is "(?P<image>\S+)"', show_version_output, re.DOTALL)
+    if regex:
+        return regex.group('ios', 'uptime', 'image')
 
-headers = ["hostname", "ios", "image", "uptime"]
+def write_inventory_to_csv(data_filenames, csv_filename):
+    headers = ["hostname", "ios", "image", "uptime"]
+    with open(csv_filename, 'w', newline = '') as dest:
+        writer = csv.writer(dest)
+        writer.writerow(headers)
+
+        for file in data_filenames:
+            hostname = re.search(r'sh_version_(?P<hostname>\S+).txt', file).group(0)
+            with open(file) as source:
+                output = parse_sh_version(source.read())
+                if output:
+                    writer.writerow([hostname] + list(output))
+
+if __name__ == "__main__":
+    sh_version_files = glob.glob("sh_vers*")
+        # print(sh_version_files)
+    write_inventory_to_csv(sh_version_files, "inventory.csv")
